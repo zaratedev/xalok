@@ -1,0 +1,29 @@
+{% extends "app.html.twig" %}
+
+{% block title %}Create Vehicle{% endblock %}
+
+{% block body %}
+	<h2 class="pb-2 border-bottom">Create Vehicle</h2>
+	<form action="{{ path('vehicles_store') }}" method="post">
+		<div class="mb-3">
+			<label for="brand" class="form-label">Brand</label>
+			<input type="text" class="form-control" id="brand" name="brand" required>
+		</div>
+        <div class="mb-3">
+			<label for="model" class="form-label">Model</label>
+			<input type="text" class="form-control" id="model" name="model" required>
+		</div>
+		<div class="mb-3">
+			<label for="plate" class="form-label">Plate</label>
+			<input type="text" class="form-control" id="plate" name="plate" required>
+		</div>
+		<div class="mb-3">
+			<label for="license_required" class="form-label">License Required</label>
+			<select class="form-select" id="license_required" name="license_required" required>
+				<option value="Y">YES</option>
+				<option value="N">NO</option>
+			</select>
+		</div>
+		<button type="submit" class="btn btn-primary">Create</button>
+	</form>
+{% endblock %}

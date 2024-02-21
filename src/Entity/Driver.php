@@ -6,6 +6,7 @@ use App\Repository\DriverRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DriverRepository::class)]
+#[ORM\Table(name: "drivers")]
 class Driver
 {
     #[ORM\Id]

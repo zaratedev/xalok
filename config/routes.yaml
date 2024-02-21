@@ -1,3 +1,27 @@
 controllers:
     resource: ../src/Controller/
     type: attribute
+
+# Vehicles
+vehicles_index:
+    path: /vehicles
+    controller: App\Controller\VehicleController::index
+
+vehicles_create:
+    path: /vehicles/create
+    controller: App\Controller\VehicleController::create
+
+vehicles_store:
+    path: /vehicles/store
+    controller: App\Controller\VehicleController::store
+
+vehicles_edit:
+    path: /vehicles/{id}/edit
+    controller: App\Controller\VehicleController::edit
+    methods: ['GET', 'POST']
+    requirements:
+        id: '\d+'
+
+vehicles_delete:
+    path: /vehicles/{id}/delete
+    controller: App\Controller\VehicleController::delete

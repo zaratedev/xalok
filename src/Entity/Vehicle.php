@@ -6,6 +6,7 @@ use App\Repository\VehicleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VehicleRepository::class)]
+#[ORM\Table(name: "vehicles")]
 class Vehicle
 {
     #[ORM\Id]
@@ -15,6 +16,9 @@ class Vehicle
 
     #[ORM\Column]
     private string $brand;
+
+    #[ORM\Column]
+    private string $model;
 
     #[ORM\Column]
     private string $plate;
@@ -39,7 +43,19 @@ class Vehicle
         return $this;
     }
 
-    public function getPlace(): string
+    public function getModel(): string
+    {
+        return $this->model;
+    }
+
+    public function setModel(string $model): self
+    {
+        $this->model = $model;
+
+        return $this;
+    }
+
+    public function getPlate(): string
     {
         return $this->plate;
     }
