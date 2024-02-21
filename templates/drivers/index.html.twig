@@ -1,0 +1,43 @@
+{% extends "app.html.twig" %}
+
+{% block title %}Drivers
+{% endblock %}
+
+{% block body %}
+	<div class="d-grid gap-2 d-md-flex justify-content-between">
+		<h2 class="pb-2">Manage Drivers</h2>
+		<div>
+			<a href="{{ path('drivers_create') }}" class="btn btn-success me-md-2" type="button">Create Driver</a>
+		</div>
+	</div>
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Name</th>
+				<th scope="col">Surname</th>
+				<th scope="col">License Required</th>
+				<th scope="col">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for driver in drivers %}
+				<tr>
+					<th scope="row">{{ driver.id }}</th>
+					<td>{{ driver.name }}</td>
+					<td>{{ driver.surname }}</td>
+					<td>{{ driver.license }}</td>
+					<td>
+						<div class="row g-2">
+							<a href="{{ path('drivers_edit', { id: driver.id }) }}" class="btn btn-outline-primary col-auto">Edit</a>
+							<form action="{{ path('drivers_delete', {'id': driver.id}) }}" method="post" class="col-auto" onsubmit="return confirm('Are you sure?')">
+								<input type="hidden" name="_method" value="DELETE">
+								<button type="submit" class="btn btn-outline-danger">Delete</button>
+							</form>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "app.html.twig" %}
+
+{% block title %}
+    Create Driver
+{% endblock %}
+
+{% block body %}
+	<h2 class="pb-2 border-bottom">Create Driver</h2>
+	<form action="{{ path('drivers_store') }}" method="post">
+		<div class="mb-3">
+			<label for="name" class="form-label">Name</label>
+			<input type="text" class="form-control" id="name" name="name" required>
+		</div>
+		<div class="mb-3">
+			<label for="surname" class="form-label">Surname</label>
+			<input type="text" class="form-control" id="surname" name="surname" required>
+		</div>
+		<div class="mb-3">
+			<label for="license" class="form-label">License</label>
+			<select class="form-select" id="license" name="license" required>
+				<option value="Y">YES</option>
+				<option value="N">NO</option>
+			</select>
+		</div>
+		<a href="{{ path('drivers_index') }}" class="btn btn-secondary me-4">Return to list</a>
+		<button type="submit" class="btn btn-primary">Create</button>
+	</form>
+{% endblock %}

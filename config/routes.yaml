@@ -25,3 +25,27 @@ vehicles_edit:
 vehicles_delete:
     path: /vehicles/{id}/delete
     controller: App\Controller\VehicleController::delete
+
+# Drivers
+drivers_index:
+    path: /drivers
+    controller: App\Controller\DriverController::index
+
+drivers_create:
+    path: /drivers/create
+    controller: App\Controller\DriverController::create
+
+drivers_store:
+    path: /drivers/store
+    controller: App\Controller\DriverController::store
+
+drivers_edit:
+    path: /drivers/{id}/edit
+    controller: App\Controller\DriverController::edit
+    methods: ['GET', 'POST']
+    requirements:
+        id: '\d+'
+
+drivers_delete:
+    path: /drivers/{id}/delete
+    controller: App\Controller\DriverController::delete

@@ -1,6 +1,8 @@
 {% extends "app.html.twig" %}
 
-{% block title %}Create Vehicle{% endblock %}
+{% block title %}
+    Create Vehicle
+{% endblock %}
 
 {% block body %}
 	<h2 class="pb-2 border-bottom">Create Vehicle</h2>
@@ -9,7 +11,7 @@
 			<label for="brand" class="form-label">Brand</label>
 			<input type="text" class="form-control" id="brand" name="brand" required>
 		</div>
-        <div class="mb-3">
+		<div class="mb-3">
 			<label for="model" class="form-label">Model</label>
 			<input type="text" class="form-control" id="model" name="model" required>
 		</div>
@@ -24,6 +26,7 @@
 				<option value="N">NO</option>
 			</select>
 		</div>
+		<a href="{{ path('vehicles_index') }}" class="btn btn-secondary me-4">Return to list</a>
 		<button type="submit" class="btn btn-primary">Create</button>
 	</form>
 {% endblock %}

@@ -1,39 +1,46 @@
 {% extends "app.html.twig" %}
 
-{% block title %}Vehicles manage{% endblock %}
+{% block title %}
+	Vehicles manage
+{% endblock %}
 
 {% block body %}
-<h2 class="pb-2 border-bottom">Manage Vehicles</h2>
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Brand</th>
-      <th scope="col">Model</th>
-      <th scope="col">Plate</th>
-      <th scope="col">License Required</th>
-      <th scope="col">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for vehicle in vehicles %}  
-    <tr>
-      <th scope="row">{{ vehicle.id }}</th>
-      <td>{{ vehicle.brand }}</td>
-      <td>{{ vehicle.model }}</td>
-      <td>{{ vehicle.plate }}</td>
-      <td>{{ vehicle.licenseRequired }}</td>
-      <td>
-        <div class="row g-2">
-        <button type="submit" class="btn btn-outline-primary col-auto">Edit</button>
-        <form action="{{ path('vehicles_delete', {'id': vehicle.id}) }}" method="post" class="col-auto" onsubmit="return confirm('Are you sure?')">
-            <input type="hidden" name="_method" value="DELETE">
-              <button type="submit" class="btn btn-outline-danger">Delete</button>
-        </form>
-        </div>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+	<div class="d-grid gap-2 d-md-flex justify-content-between">
+		<h2 class="pb-2">Manage Vehicles</h2>
+		<div>
+			<a href="{{ path('vehicles_create') }}" class="btn btn-success me-md-2" type="button">Create Vehicle</a>
+		</div>
+	</div>
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Brand</th>
+				<th scope="col">Model</th>
+				<th scope="col">Plate</th>
+				<th scope="col">License Required</th>
+				<th scope="col">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for vehicle in vehicles %}
+				<tr>
+					<th scope="row">{{ vehicle.id }}</th>
+					<td>{{ vehicle.brand }}</td>
+					<td>{{ vehicle.model }}</td>
+					<td>{{ vehicle.plate }}</td>
+					<td>{{ vehicle.licenseRequired }}</td>
+					<td>
+						<div class="row g-2">
+							<a href="{{ path('drivers_edit', { id: vehicle.id }) }}" class="btn btn-outline-primary col-auto">Edit</a>
+							<form action="{{ path('vehicles_delete', {'id': vehicle.id}) }}" method="post" class="col-auto" onsubmit="return confirm('Are you sure?')">
+								<input type="hidden" name="_method" value="DELETE">
+								<button type="submit" class="btn btn-outline-danger">Delete</button>
+							</form>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 {% endblock %}
