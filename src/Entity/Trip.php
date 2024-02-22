@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Vehicle;
+use App\Entity\Driver;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TripRepository;
 
@@ -14,11 +16,11 @@ class Trip
     #[ORM\Column(type: "integer")]
     private int $id;
 
-    #[ORM\ManyToOne(targetEntity: Vehicle::class)]
+    #[ORM\ManyToOne(targetEntity: Vehicle::class, inversedBy: "trips")]
     #[ORM\JoinColumn(nullable: false)]
     private Vehicle $vehicle;
 
-    #[ORM\ManyToOne(targetEntity: Driver::class)]
+    #[ORM\ManyToOne(targetEntity: Driver::class, inversedBy: "trips")]
     #[ORM\JoinColumn(nullable: false)]
     private Driver $driver;
 

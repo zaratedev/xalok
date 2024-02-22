@@ -24,9 +24,9 @@
 			{% for trip in trips %}
 				<tr>
 					<th scope="row">{{ trip.id }}</th>
-					<td>{{ trip.vehicle.plate }}</td>
-					<td>{{ trip.driver.name }}</td>
-					<td>{{ trip.date }}</td>
+					<td>{{ trip.vehicle.brand }} - {{ trip.vehicle.model}} - {{ trip.vehicle.plate }}</td>
+					<td>{{ trip.driver.name }} {{ trip.driver.surname }}</td>
+					<td>{{ trip.date.format('Y-m-d') }}</td>
 				</tr>
 			{% endfor %}
 		</tbody>

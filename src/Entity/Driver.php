@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use App\Entity\Trip;
 use App\Repository\DriverRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DriverRepository::class)]
@@ -22,6 +25,14 @@ class Driver
 
     #[ORM\Column]
     private string $license;
+
+    #[ORM\OneToMany(targetEntity: Trip::class, mappedBy: "vehicle")]
+    private $trips;
+
+    public function __construct()
+    {
+        $this->trips = new ArrayCollection();
+    }
 
     public function getId(): int
     {
@@ -62,5 +73,13 @@ class Driver
         $this->license = $license;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Trip[]
+     */
+    public function getTrips(): Collection
+    {
+        return $this->trips;
     }
 }

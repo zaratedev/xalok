@@ -11,28 +11,52 @@
 {% block body %}
 	<h2 class="pb-2 border-bottom">Create Trip</h2>
 	<div id="app">
-		${ message }$
+		<div class="alert alert-dismissible fade show" :class="'alert-' + alert.type" v-show="alert.open" role="alert">
+			${ alert.message }$
+  			<button type="button" @click="alert.open = false" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+		<form @submit.prevent="submitForm">
+			<div class="mb-3">
+				<label for="date" class="form-label">Date</label>
+				<input
+					id="date"
+					name="date" 
+					type="date"
+					class="form-control"
+					v-model="formData.date"
+					@change="fetchAvailableVehicles"
+					required
+				>
+			</div>
+			<div class="mb-3">
+				<label for="vehicle" class="form-label">Vehicles</label>
+				<select
+					id="vehicle"
+					name="vehicle_id"
+					class="form-select"
+					v-model="formData.vehicle"
+					@change="fetchAvailableDrivers"
+					required
+				>
+					<option disabled>Choose a vehicle</option>
+					<option v-for="vehicle in vehicles" :value="vehicle">
+						${ vehicle.brand }$ - ${ vehicle.model }$
+					</option>
+				</select>
+			</div>
+			<div class="mb-3">
+				<label for="driver" class="form-label">Drivers</label>
+				<select class="form-select" id="driver" name="driver_id" v-model="formData.driver" required>
+					<option disabled>Choose a vehicle</option>
+					<option v-for="driver in drivers" :value="driver">
+						${ driver.name }$ ${ driver.surname }$
+					</option>
+				</select>
+			</div>
+			<a href="{{ path('trip_index') }}" class="btn btn-secondary me-4">Return to list</a>
+			<button type="submit" class="btn btn-primary">Create</button>
+		</form>
 	</div>
-	<form action="#" method="post">
-		<div class="mb-3">
-			<label for="date" class="form-label">Date</label>
-			<input type="date" class="form-control" id="date" name="date" required>
-		</div>
-		<div class="mb-3">
-			<label for="vehicle" class="form-label">Vehicles</label>
-			<select class="form-select" id="vehicle" name="vehicle_id" required>
-                <option disabled>Choose an option</option>
-			</select>
-		</div>
-        <div class="mb-3">
-			<label for="driver" class="form-label">Drivers</label>
-			<select class="form-select" id="driver" name="driver_id" required>
-                <option disabled>Choose an option</option>
-			</select>
-		</div>
-		<a href="{{ path('trip_index') }}" class="btn btn-secondary me-4">Return to list</a>
-		<button type="submit" class="btn btn-primary">Create</button>
-	</form>
 {% endblock %}
 
 {% block scripts %}
@@ -41,8 +65,91 @@
 		delimiters: ['${', '}$'],
         el: '#app',
         data: {
-            message: '¡Hola desde Vue!'
-        }
+			alert: {
+				open: false,
+				message: '',
+				type: 'success'
+			},
+			formData: {
+				date: '',
+				vehicle: null,
+				driver: null,
+			},
+			vehicles: [],
+			drivers: []
+        },
+		methods: {
+			submitForm() {
+				const data = {
+					date: this.formData.date,
+					vehicle_id: this.formData.vehicle.id,
+					driver_id: this.formData.driver.id
+				};
+
+				fetch('/api/trip/store', {
+					method: 'POST',
+					body: JSON.stringify(data)
+				})
+				.then(response => response.json())
+				.then(data => {
+					this.displayAlert(data.message);
+					this.clearVehiclesAndDrivers();
+					this.formData.date = '';
+				})
+				.catch(error => {
+					console.log(error);
+					this.displayAlert('An error has occurred', 'danger');
+				});
+            },
+			fetchAvailableVehicles() {
+				this.clearVehiclesAndDrivers();
+
+				fetch(`/api/trip/vehicles?date=${this.formData.date}`)
+					.then(response => response.json())
+					.then(data => {
+						this.vehicles = data.data;
+
+						if (this.vehicles.length === 0) {
+							this.displayAlert('Vehicles not available', 'danger');
+						}
+					})
+					.catch(error => {
+						console.log(error);
+						this.displayAlert('Vehicles not available', 'danger');
+					});
+			},
+			fetchAvailableDrivers() {
+				fetch(`/api/trip/drivers`, {
+					method: 'POST',
+					body: JSON.stringify({
+						date: this.formData.date,
+						license: this.formData.vehicle.licenseRequired
+					})
+				})
+				.then(response => response.json())
+				.then(data => {
+					this.drivers = data.data;
+
+					if (this.drivers.length === 0) {
+						this.displayAlert('Drivers not available', 'danger');
+					}
+				})
+				.catch(error => console.log(error));
+			},
+			clearVehiclesAndDrivers() {
+				this.formData.vehicle = null;
+				this.formData.driver = null;
+				this.vehicles = [];
+				this.drivers = [];
+			},
+			displayAlert(message, type = 'success') {
+				this.alert = {
+					open: true,
+					message,
+					type
+				}
+			}
+		}
     });
 </script>
 {% endblock %}

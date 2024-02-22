@@ -21,28 +21,19 @@ class VehicleRepository extends ServiceEntityRepository
         parent::__construct($registry, Vehicle::class);
     }
 
-//    /**
-//     * @return Vehicle[] Returns an array of Vehicle objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('v')
-//            ->andWhere('v.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('v.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Vehicle
-//    {
-//        return $this->createQueryBuilder('v')
-//            ->andWhere('v.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+   /**
+    * @param string $date
+    * @return Vehicle[] Returns an array of Vehicle objects
+    */
+    public function findByDate(string $date): array
+    {
+        return $this->createQueryBuilder('v')
+            ->select('v')
+            ->leftJoin('v.trips', 't')
+            ->andWhere('t.date != :date OR t.date IS NULL')
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

@@ -21,28 +21,22 @@ class DriverRepository extends ServiceEntityRepository
         parent::__construct($registry, Driver::class);
     }
 
-//    /**
-//     * @return Driver[] Returns an array of Driver objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('d.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Driver
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+   /**
+    * @param string $date
+    * @param string $license
+    *
+    * @return Driver[] Returns an array of Driver objects
+    */
+    public function findByDateAndLicense(string $date, string $license): array
+    {
+        return $this->createQueryBuilder('d')
+            ->leftJoin('d.trips', 't')
+            ->andWhere('t.date != :date OR t.date IS NULL')
+            ->andWhere('d.license = :license')
+            ->setParameter('date', $date)
+            ->setParameter('license', $license)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }
