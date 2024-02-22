@@ -1,0 +1,49 @@
+{% extends "app.html.twig" %}
+
+{% block title %}
+    Create Trip
+{% endblock %}
+
+{% block javascripts %}
+	<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+{% endblock %}
+
+{% block body %}
+	<h2 class="pb-2 border-bottom">Create Trip</h2>
+	<div id="app">
+		${ message }$
+	</div>
+	<form action="#" method="post">
+		<div class="mb-3">
+			<label for="date" class="form-label">Date</label>
+			<input type="date" class="form-control" id="date" name="date" required>
+		</div>
+		<div class="mb-3">
+			<label for="vehicle" class="form-label">Vehicles</label>
+			<select class="form-select" id="vehicle" name="vehicle_id" required>
+                <option disabled>Choose an option</option>
+			</select>
+		</div>
+        <div class="mb-3">
+			<label for="driver" class="form-label">Drivers</label>
+			<select class="form-select" id="driver" name="driver_id" required>
+                <option disabled>Choose an option</option>
+			</select>
+		</div>
+		<a href="{{ path('trip_index') }}" class="btn btn-secondary me-4">Return to list</a>
+		<button type="submit" class="btn btn-primary">Create</button>
+	</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var app = new Vue({
+		delimiters: ['${', '}$'],
+        el: '#app',
+        data: {
+            message: '¡Hola desde Vue!'
+        }
+    });
+</script>
+{% endblock %}
+
