@@ -4,7 +4,8 @@
 
 The company Uster wants to create an application that manages the reservation of vehicles by customers
 
-E-R diagram
+E-R diagram.
+
 <img width="427" alt="Captura de pantalla 2024-02-22 a la(s) 16 50 43" src="https://github.com/zaratedev/xalok/assets/29809845/e23be2b2-77b0-4613-85b6-18230adb0ea8">
 
 ## Requirement
