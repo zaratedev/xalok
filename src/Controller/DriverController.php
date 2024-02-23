@@ -3,24 +3,24 @@
 namespace App\Controller;
 
 use App\Entity\Driver;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\DriverService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DriverController extends AbstractController
 {
-    private $entityManager;
+    private $driverService;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(DriverService $driverService)
     {
-        $this->entityManager = $entityManager;
+        $this->driverService = $driverService;
     }
 
     #[Route('/drivers', name: 'drivers_index', methods: ['GET'])]
     public function index()
     {
-        $drivers = $this->entityManager->getRepository(Driver::class)->findAll();
+        $drivers = $this->driverService->getAllDrivers();
 
         return $this->render('drivers/index.html.twig', compact('drivers'));
     }
@@ -34,14 +34,7 @@ class DriverController extends AbstractController
     #[Route('/drivers/store', name: 'drivers_store', methods: ['POST'])]
     public function store(Request $request)
     {
-        $driver = new Driver();
-
-        $driver->setName($request->get('name'))
-            ->setSurname($request->get('surname'))
-            ->setLicense($request->get('license'));
-
-        $this->entityManager->persist($driver);
-        $this->entityManager->flush();
+        $this->driverService->createDriver($request->request->all());
 
         return $this->redirectToRoute('drivers_index');
     }
@@ -49,18 +42,14 @@ class DriverController extends AbstractController
     #[Route('/drivers/{id}/edit', name: 'drivers_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id)
     {
-        $driver = $this->entityManager->getRepository(Driver::class)->find($id);
+        $driver = $this->driverService->getDriverById($id);
 
         if (!$driver) {
             throw $this->createNotFoundException("No driver found for id $id");
         }
 
         if ($request->isMethod('post')) {
-            $driver->setName($request->get('name'))
-                ->setSurname($request->get('surname'))
-                ->setLicense($request->get('license'));
-
-            $this->entityManager->flush();
+            $this->driverService->updateDriver($driver, $request->request->all());
         }
 
         return $this->render('drivers/edit.html.twig', compact('driver'));
@@ -69,14 +58,13 @@ class DriverController extends AbstractController
     #[Route('/drivers/{id}/delete', name: 'drivers_delete', methods: ['DELETE'])]
     public function delete(int $id)
     {
-        $driver = $this->entityManager->getRepository(Driver::class)->find($id);
+        $driver = $this->driverService->getDriverById($id);
 
         if (!$driver) {
             throw $this->createNotFoundException("No driver found for id $id");
         }
 
-        $this->entityManager->remove($driver);
-        $this->entityManager->flush();
+        $this->driverService->deleteDriver($driver);
 
         return $this->redirectToRoute('drivers_index');
     }

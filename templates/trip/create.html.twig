@@ -11,7 +11,7 @@
 {% block body %}
 	<h2 class="pb-2 border-bottom">Create Trip</h2>
 	<div id="app">
-		<div class="alert alert-dismissible fade show" :class="'alert-' + alert.type" v-show="alert.open" role="alert">
+		<div class="alert alert-dismissible fade show" :class="'alert-' + alert.type" v-if="alert.open" role="alert">
 			${ alert.message }$
   			<button type="button" @click="alert.open = false" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 		</div>

@@ -3,24 +3,24 @@
 namespace App\Controller;
 
 use App\Entity\Vehicle;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\VehicleService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class VehicleController extends AbstractController
 {
-    private $entityManager;
+    private $vehicleService;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(VehicleService $vehicleService)
     {
-        $this->entityManager = $entityManager;
+        $this->vehicleService = $vehicleService;
     }
 
     #[Route('/vehicles', name: 'vehicles_index', methods: ['GET'])]
     public function index()
     {
-        $vehicles = $this->entityManager->getRepository(Vehicle::class)->findAll();
+        $vehicles = $this->vehicleService->getAllVehicles();
 
         return $this->render('vehicles/index.html.twig', compact('vehicles'));
     }
@@ -34,15 +34,7 @@ class VehicleController extends AbstractController
     #[Route('/vehicles/store', name: 'vehicles_store', methods: ['POST'])]
     public function store(Request $request)
     {
-        $vehicle = new Vehicle();
-
-        $vehicle->setBrand($request->get('brand'))
-            ->setModel($request->get('model'))
-            ->setPlate($request->get('plate'))
-            ->setLicenseRequired($request->get('license_required'));
-
-        $this->entityManager->persist($vehicle);
-        $this->entityManager->flush();
+        $this->vehicleService->createVehicle($request->request->all());
 
         return $this->redirectToRoute('vehicles_index');
     }
@@ -50,21 +42,14 @@ class VehicleController extends AbstractController
     #[Route('/vehicles/{id}/edit', name: 'vehicles_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id)
     {
-        $vehicle = $this->entityManager->getRepository(Vehicle::class)->find($id);
+        $vehicle = $this->vehicleService->getVehicleById($id);
 
         if (!$vehicle) {
-            throw $this->createNotFoundException(
-                'No vehicle found for id '.$id
-            );
+            throw $this->createNotFoundException("No vehicle found for id $id");
         }
 
-        if ($request->isMethod('post')) {
-            $vehicle->setBrand($request->get('brand'))
-                ->setModel($request->get('model'))
-                ->setPlate($request->get('plate'))
-                ->setLicenseRequired($request->get('license_required'));
-
-            $this->entityManager->flush();
+        if ($request->isMethod('POST')) {
+            $this->vehicleService->updateVehicle($vehicle, $request->request->all());
         }
 
         return $this->render('vehicles/edit.html.twig', compact('vehicle'));
@@ -73,16 +58,13 @@ class VehicleController extends AbstractController
     #[Route('/vehicles/{id}/delete', name: 'vehicles_delete', methods: ['DELETE'])]
     public function delete(int $id)
     {
-        $vehicle = $this->entityManager->getRepository(Vehicle::class)->find($id);
+        $vehicle = $this->vehicleService->getVehicleById($id);
 
         if (!$vehicle) {
-            throw $this->createNotFoundException(
-                'No vehicle found for id '.$id
-            );
+            throw $this->createNotFoundException("No vehicle found for id $id");
         }
 
-        $this->entityManager->remove($vehicle);
-        $this->entityManager->flush();
+        $this->vehicleService->deleteVehicle($vehicle);
 
         return $this->redirectToRoute('vehicles_index');
     }

@@ -29,10 +29,10 @@
 					<td>{{ vehicle.brand }}</td>
 					<td>{{ vehicle.model }}</td>
 					<td>{{ vehicle.plate }}</td>
-					<td>{{ vehicle.licenseRequired }}</td>
+					<td>{{ vehicle.licenseRequired == 'Y' ? 'YES' : 'NO' }}</td>
 					<td>
 						<div class="row g-2">
-							<a href="{{ path('drivers_edit', { id: vehicle.id }) }}" class="btn btn-outline-primary col-auto">Edit</a>
+							<a href="{{ path('vehicles_edit', { id: vehicle.id }) }}" class="btn btn-outline-primary col-auto">Edit</a>
 							<form action="{{ path('vehicles_delete', {'id': vehicle.id}) }}" method="post" class="col-auto" onsubmit="return confirm('Are you sure?')">
 								<input type="hidden" name="_method" value="DELETE">
 								<button type="submit" class="btn btn-outline-danger">Delete</button>
